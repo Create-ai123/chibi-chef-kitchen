@@ -25,16 +25,16 @@ export const Route = createFileRoute("/")({
 });
 
 const PANTRY = [
-  "Oats 🌾",
-  "Milk 🥛",
-  "Flour 🌾",
-  "Eggs 🥚",
-  "Tomatoes 🍅",
-  "Chocolate Syrup 🍫",
-  "Bananas 🍌",
-  "Bread 🍞",
-  "Rice 🍚",
-  "Cheese 🧀",
+  "Oats",
+  "Milk",
+  "Flour",
+  "Eggs",
+  "Tomatoes",
+  "Chocolate Syrup",
+  "Bananas",
+  "Bread",
+  "Rice",
+  "Cheese",
 ];
 
 const TIME_FILTERS = [
