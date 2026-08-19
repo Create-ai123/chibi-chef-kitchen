@@ -246,7 +246,7 @@ function Index() {
     return (
       <main className="grid min-h-screen place-items-center bg-background px-4 py-10 font-nunito text-foreground">
         <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
-          <div className="mx-auto flex h-40 w-40 items-center justify-center transition-transform hover:scale-110">
+          <div className="mx-auto flex h-32 w-32 items-center justify-center sm:h-40 sm:w-40">
             <img
               src={chefMascot}
               alt="Cozy chef mascot smiling"
@@ -254,7 +254,7 @@ function Index() {
               height={768}
               loading="eager"
               decoding="async"
-              className="animate-scale-in h-32 w-32 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
+              className="h-28 w-28 object-contain [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)] sm:h-32 sm:w-32"
             />
           </div>
           <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
@@ -292,7 +292,7 @@ function Index() {
               height={768}
               loading="eager"
               decoding="async"
-              className={`h-28 w-28 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
+              className="h-20 w-20 shrink-0 object-contain sm:h-28 sm:w-28"
             />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -543,14 +543,14 @@ function Index() {
 
             {/* Chef's Thought */}
             <div className="mt-6 flex items-start gap-3">
-              <div className="flex h-16 w-16 shrink-0 items-end justify-center transition-transform hover:scale-110">
+              <div className="flex h-12 w-12 shrink-0 items-end justify-center sm:h-16 sm:w-16">
                 <img
                   src={chefMascot}
                   alt=""
                   loading="eager"
                   width={768}
                   height={768}
-                  className="h-16 w-16 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] [mask-image:linear-gradient(to_bottom,black_55%,transparent_100%)]"
+                  className="h-12 w-12 object-contain [mask-image:linear-gradient(to_bottom,black_55%,transparent_100%)] sm:h-16 sm:w-16"
                 />
               </div>
               <div className="relative flex-1 rounded-3xl bg-card px-4 py-3 shadow-[var(--shadow-soft)]">
