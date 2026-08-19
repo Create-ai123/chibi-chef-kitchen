@@ -203,7 +203,7 @@ function Index() {
     setChecked({});
     setSeconds(null);
     setTimeout(() => {
-      setRecipe(pickRecipe(selected, quickOnly, TIMES[timeIdx]));
+      setRecipe(pickRecipe(selected, quickOnly, TIMES[timeIdx] ?? 5));
       setLoading(false);
       setSparkle(true);
       setTimeout(() => setSparkle(false), 1600);
