@@ -245,13 +245,13 @@ function Index() {
     return (
       <main className="grid min-h-screen place-items-center bg-background px-4 py-10 font-nunito text-foreground">
         <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
-          <div className="mx-auto flex h-32 w-32 items-center justify-center bg-accent/60 shadow-[var(--shadow-soft)] transition-transform hover:scale-110 hover:animate-bounce">
+          <div className="mx-auto flex h-40 w-40 items-center justify-center transition-transform hover:scale-110">
             <img
               src={chefMascot}
               alt="Cozy chef mascot smiling"
               width={768}
               height={768}
-              className="h-16 w-16 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+              className="h-32 w-32 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
             />
           </div>
           <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
