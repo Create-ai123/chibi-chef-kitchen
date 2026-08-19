@@ -357,7 +357,7 @@ function Index() {
           {/* Basket */}
           <div className="mt-5 rounded-3xl border-2 border-dashed border-border bg-muted/60 p-4">
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-              Selected Pantry Basket 🧺
+              SELECTED PANTRY BASKET&nbsp;
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {selected.length === 0 && (
