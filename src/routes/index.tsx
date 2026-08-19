@@ -190,11 +190,12 @@ function Index() {
   useEffect(() => {
     if (started) return;
     let i = 0;
+    setTyped("");
     const id = setInterval(() => {
       i += 1;
       setTyped(INTRO_LINE.slice(0, i));
       if (i >= INTRO_LINE.length) clearInterval(id);
-    }, 32);
+    }, 18);
     return () => clearInterval(id);
   }, [started]);
 
@@ -251,7 +252,9 @@ function Index() {
               alt="Cozy chef mascot smiling"
               width={768}
               height={768}
-              className="h-32 w-32 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
+              loading="eager"
+              decoding="async"
+              className="animate-scale-in h-32 w-32 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
             />
           </div>
           <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
@@ -287,7 +290,9 @@ function Index() {
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
-              className={`animate-spring h-24 w-24 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
+              loading="eager"
+              decoding="async"
+              className={`animate-jump h-28 w-28 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
             />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
