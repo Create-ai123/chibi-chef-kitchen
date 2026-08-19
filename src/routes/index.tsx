@@ -465,15 +465,15 @@ function Index() {
               </div>
             )}
 
-            <h2 className="text-2xl font-extrabold">{recipe.title}</h2>
+            <h2 className="font-fredoka text-2xl font-extrabold">{recipe.title}</h2>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">
+              <span className="rounded-full bg-accent px-3 py-1 font-fredoka text-xs font-bold text-accent-foreground">
                 ⏱️ {recipe.time} min
               </span>
-              <span className="rounded-full bg-mint px-3 py-1 text-xs font-bold text-secondary-foreground">
+              <span className="rounded-full bg-mint px-3 py-1 font-fredoka text-xs font-bold text-secondary-foreground">
                 🍳 {recipe.method}
               </span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold">🟢 Beginner</span>
+              <span className="rounded-full bg-muted px-3 py-1 font-fredoka text-xs font-bold">🟢 Beginner</span>
             </div>
 
             <h3 className="mt-6 text-sm font-bold uppercase tracking-widest text-muted-foreground">
@@ -538,14 +538,14 @@ function Index() {
 
             {/* Chef's Thought */}
             <div className="mt-6 flex items-start gap-3">
-              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full bg-accent/70 shadow-[var(--shadow-soft)]">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center bg-accent/70 shadow-[var(--shadow-soft)] transition-transform hover:scale-110">
                 <img
                   src={chefMascot}
                   alt=""
                   loading="lazy"
                   width={768}
                   height={768}
-                  className="h-24 w-14 max-w-none scale-[1.6] object-cover object-top"
+                  className="h-10 w-10 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
                 />
               </div>
               <div className="relative flex-1 rounded-3xl bg-card px-4 py-3 shadow-[var(--shadow-soft)]">
@@ -553,7 +553,7 @@ function Index() {
                   className="absolute -left-1.5 top-6 h-3 w-3 rotate-45 bg-card"
                   aria-hidden
                 />
-                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                <p className="font-fredoka text-xs font-bold uppercase tracking-widest text-muted-foreground">
                   Chef&apos;s Thought 💭
                 </p>
                 <p className="mt-1 text-sm font-medium">{recipe.tip}</p>
@@ -565,7 +565,7 @@ function Index() {
               <button
                 type="button"
                 onClick={() => setSeconds(seconds === null ? recipe.time * 60 : null)}
-                className={`rounded-full bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition-transform duration-200 hover:scale-105 active:scale-95 ${
+                className={`rounded-full bg-primary px-5 py-3 font-fredoka text-sm font-bold text-primary-foreground transition-transform duration-200 hover:scale-105 active:scale-95 ${
                   seconds !== null && seconds > 0 ? "animate-pulse" : ""
                 }`}
               >
