@@ -25,16 +25,16 @@ export const Route = createFileRoute("/")({
 });
 
 const PANTRY = [
-  "Oats 🌾",
-  "Milk 🥛",
-  "Flour 🌾",
-  "Eggs 🥚",
-  "Tomatoes 🍅",
-  "Chocolate Syrup 🍫",
-  "Bananas 🍌",
-  "Bread 🍞",
-  "Rice 🍚",
-  "Cheese 🧀",
+  "Oats",
+  "Milk",
+  "Flour",
+  "Eggs",
+  "Tomatoes",
+  "Chocolate Syrup",
+  "Bananas",
+  "Bread",
+  "Rice",
+  "Cheese",
 ];
 
 const TIME_FILTERS = [
@@ -175,7 +175,7 @@ const INTRO_LINE =
 function Index() {
   const [started, setStarted] = useState(false);
   const [typed, setTyped] = useState("");
-  const [selected, setSelected] = useState<string[]>(["Oats 🌾", "Milk 🥛"]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [custom, setCustom] = useState("");
   const [quickOnly, setQuickOnly] = useState(true);
   const [filter, setFilter] = useState<FilterId>("quick");
@@ -245,13 +245,13 @@ function Index() {
     return (
       <main className="grid min-h-screen place-items-center bg-background px-4 py-10 font-nunito text-foreground">
         <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
-          <div className="mx-auto flex h-32 w-32 items-center justify-center bg-accent/60 shadow-[var(--shadow-soft)] transition-transform hover:scale-110 hover:animate-bounce">
+          <div className="mx-auto flex h-40 w-40 items-center justify-center transition-transform hover:scale-110">
             <img
               src={chefMascot}
               alt="Cozy chef mascot smiling"
               width={768}
               height={768}
-              className="h-16 w-16 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+              className="h-32 w-32 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
             />
           </div>
           <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
@@ -287,7 +287,7 @@ function Index() {
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
-              className={`animate-scale-in h-16 w-16 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
+              className={`animate-spring h-24 w-24 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
             />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -330,7 +330,7 @@ function Index() {
                       : "border-border bg-muted text-foreground hover:bg-accent"
                   }`}
                 >
-                  {item}
+                  {item}&nbsp;
                 </button>
               );
             })}
@@ -357,7 +357,7 @@ function Index() {
           {/* Basket */}
           <div className="mt-5 rounded-3xl border-2 border-dashed border-border bg-muted/60 p-4">
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-              Selected Pantry Basket 🧺
+              SELECTED PANTRY BASKET&nbsp;
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {selected.length === 0 && (
@@ -368,7 +368,7 @@ function Index() {
                   key={item}
                   className="animate-scale-in flex items-center gap-2 rounded-full bg-mint px-3 py-1.5 text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]"
                 >
-                  {item}
+                  {item}&nbsp;
                   <button
                     type="button"
                     aria-label={`Remove ${item}`}
