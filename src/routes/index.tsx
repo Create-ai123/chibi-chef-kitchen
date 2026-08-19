@@ -287,7 +287,7 @@ function Index() {
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
-              className={`animate-scale-in h-16 w-16 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
+              className={`animate-spring h-24 w-24 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
             />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
