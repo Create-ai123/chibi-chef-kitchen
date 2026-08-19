@@ -368,7 +368,7 @@ function Index() {
                   key={item}
                   className="animate-scale-in flex items-center gap-2 rounded-full bg-mint px-3 py-1.5 text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]"
                 >
-                  {item}
+                  {item}&nbsp;
                   <button
                     type="button"
                     aria-label={`Remove ${item}`}
