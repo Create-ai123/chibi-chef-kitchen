@@ -583,7 +583,7 @@ function Index() {
         )}
 
         <footer className="pb-6 text-center text-xs text-muted-foreground">
-          Made cozy with love · Your chef says: eat something warm today 💛
+          Made with love · Your chef says: eat something warm today 💛
         </footer>
       </div>
     </main>
