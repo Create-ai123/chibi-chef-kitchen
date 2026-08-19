@@ -234,7 +234,7 @@ function Index() {
   const speech = loading
     ? "Stirring the pot... 🍲"
     : recipe
-      ? "Tadaa! Here's your cozy little recipe. Check off steps as you go! 💛"
+      ? "Tadaa! Here's your recipe. Check off steps as you go! 💛"
       : selected.length
         ? `Ooh, ${selected.length} pantry treasure${selected.length > 1 ? "s" : ""}! Ready when you are.`
         : "Select what's in your pantry, and I'll whip up something delicious!";
@@ -243,15 +243,15 @@ function Index() {
 
   if (!started) {
     return (
-      <main className="grid min-h-screen place-items-center bg-background px-4 py-10 text-foreground">
+      <main className="grid min-h-screen place-items-center bg-background px-4 py-10 font-nunito text-foreground">
         <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
-          <div className="mx-auto h-32 w-32 overflow-hidden rounded-full bg-accent/60 shadow-[var(--shadow-soft)]">
+          <div className="mx-auto flex h-32 w-32 items-center justify-center bg-accent/60 shadow-[var(--shadow-soft)] transition-transform hover:scale-110 hover:animate-bounce">
             <img
               src={chefMascot}
               alt="Cozy chef mascot smiling"
               width={768}
               height={768}
-              className="h-56 w-32 max-w-none -translate-y-1 scale-[1.7] object-cover object-top"
+              className="h-16 w-16 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
             />
           </div>
           <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
@@ -259,7 +259,7 @@ function Index() {
               className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 bg-secondary"
               aria-hidden
             />
-            <p className="min-h-[3.5rem]">
+            <p className="min-h-[3.5rem] font-nunito">
               {typed}
               <span className="animate-pulse">▌</span>
             </p>
@@ -267,7 +267,7 @@ function Index() {
           <button
             type="button"
             onClick={() => setStarted(true)}
-            className="mt-6 w-full rounded-full bg-primary px-6 py-4 text-lg font-extrabold text-primary-foreground shadow-[var(--shadow-cozy)] transition-transform duration-200 hover:scale-105 active:scale-95"
+            className="mt-6 w-full rounded-full bg-primary px-6 py-4 text-lg font-fredoka font-extrabold text-primary-foreground shadow-[var(--shadow-cozy)] transition-transform duration-200 hover:scale-105 active:scale-95"
           >
             Let&apos;s Cook! ✨
           </button>
@@ -277,7 +277,7 @@ function Index() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6">
+    <main className="min-h-screen bg-background px-4 py-8 font-nunito text-foreground sm:px-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {/* Header & mascot */}
         <header className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
@@ -287,14 +287,14 @@ function Index() {
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
-              className={`animate-scale-in h-32 w-32 shrink-0 drop-shadow-md transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-105"}`}
+              className={`animate-scale-in h-16 w-16 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
             />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 Cozy Pantry
               </p>
-              <h1 className="text-2xl font-extrabold leading-tight sm:text-3xl">
-                Cozy Pantry Recipe Companion 🍳
+              <h1 className="font-fredoka text-2xl font-extrabold leading-tight sm:text-3xl">
+                Recipe Companion 🍳
               </h1>
               <div className="relative mt-3 rounded-3xl bg-secondary px-4 py-3 text-sm font-medium text-secondary-foreground shadow-[var(--shadow-soft)]">
                 <span
@@ -314,7 +314,7 @@ function Index() {
           className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
           style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
         >
-          <h2 className="text-lg font-bold">What&apos;s in your pantry?</h2>
+          <h2 className="font-fredoka text-lg font-bold">What&apos;s in your pantry?</h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {PANTRY.map((item) => {
               const on = selected.includes(item);
@@ -388,7 +388,7 @@ function Index() {
           className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
           style={{ animationDelay: "220ms", animationFillMode: "backwards" }}
         >
-          <h2 className="text-lg font-bold">Quick preferences</h2>
+          <h2 className="font-fredoka text-lg font-bold">Quick preferences</h2>
           <div className="mt-4 flex items-center justify-between gap-4 rounded-3xl bg-muted px-4 py-3">
             <span className="text-sm font-semibold">No-Oven / Quick Stovetop only 🔥</span>
             <button
@@ -435,7 +435,7 @@ function Index() {
           type="button"
           onClick={generate}
           disabled={loading}
-          className="rounded-3xl bg-primary px-6 py-5 text-lg font-extrabold text-primary-foreground shadow-[var(--shadow-cozy)] transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-70"
+          className="rounded-3xl bg-primary px-6 py-5 font-fredoka text-lg font-extrabold text-primary-foreground shadow-[var(--shadow-cozy)] transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-70"
         >
           {loading ? "Stirring the pot… 🍲" : "Cook Magic with Me ✨"}
         </button>
