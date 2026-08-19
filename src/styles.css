@@ -61,6 +61,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-recipe: var(--recipe);
   --color-mint: var(--mint);
+  --font-fredoka: "Fredoka", cursive, sans-serif;
+  --font-nunito: "Nunito", sans-serif;
 }
 
 :root {
