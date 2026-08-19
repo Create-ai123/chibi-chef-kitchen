@@ -292,7 +292,7 @@ function Index() {
               height={768}
               loading="eager"
               decoding="async"
-              className={`animate-jump h-28 w-28 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
+              className={`h-28 w-28 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-110"}`}
             />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
