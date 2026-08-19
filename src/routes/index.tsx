@@ -330,7 +330,7 @@ function Index() {
                       : "border-border bg-muted text-foreground hover:bg-accent"
                   }`}
                 >
-                  {item}
+                  {item}&nbsp;
                 </button>
               );
             })}
