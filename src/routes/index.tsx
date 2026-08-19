@@ -543,14 +543,14 @@ function Index() {
 
             {/* Chef's Thought */}
             <div className="mt-6 flex items-start gap-3">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center bg-accent/70 shadow-[var(--shadow-soft)] transition-transform hover:scale-110">
+              <div className="flex h-16 w-16 shrink-0 items-end justify-center transition-transform hover:scale-110">
                 <img
                   src={chefMascot}
                   alt=""
-                  loading="lazy"
+                  loading="eager"
                   width={768}
                   height={768}
-                  className="h-10 w-10 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                  className="h-16 w-16 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] [mask-image:linear-gradient(to_bottom,black_55%,transparent_100%)]"
                 />
               </div>
               <div className="relative flex-1 rounded-3xl bg-card px-4 py-3 shadow-[var(--shadow-soft)]">
