@@ -175,7 +175,7 @@ const INTRO_LINE =
 function Index() {
   const [started, setStarted] = useState(false);
   const [typed, setTyped] = useState("");
-  const [selected, setSelected] = useState<string[]>(["Oats 🌾", "Milk 🥛"]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [custom, setCustom] = useState("");
   const [quickOnly, setQuickOnly] = useState(true);
   const [filter, setFilter] = useState<FilterId>("quick");
