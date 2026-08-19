@@ -5,17 +5,17 @@ import chefMascot from "@/assets/chibi-chef.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Cozy Pantry Recipe Companion | Chibi Chef Snacks" },
+      { title: "Cozy Pantry Recipe Companion | Quick Pantry Snacks" },
       {
         name: "description",
         content:
-          "Pick what's in your pantry and let the chibi chef whip up a quick stovetop or microwave snack in minutes.",
+          "Pick what's in your pantry and let the cozy chef whip up a quick stovetop or microwave snack in minutes.",
       },
       { property: "og:title", content: "Cozy Pantry Recipe Companion" },
       {
         property: "og:description",
         content:
-          "A cute pantry-to-recipe helper: choose ingredients, set your time, and cook magic with the chibi chef.",
+          "A cute pantry-to-recipe helper: choose ingredients, set your time, and cook magic with the cozy chef.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -37,7 +37,13 @@ const PANTRY = [
   "Cheese 🧀",
 ];
 
-const TIMES = [5, 10, 15, 20];
+const TIME_FILTERS = [
+  { id: "quick", label: "⚡ Under 5 mins", min: 0, max: 5 },
+  { id: "mid", label: "⏳ 10-15 mins", min: 6, max: 15 },
+  { id: "long", label: "🍳 20+ mins", min: 16, max: 999 },
+] as const;
+
+type FilterId = (typeof TIME_FILTERS)[number]["id"];
 
 type Recipe = {
   title: string;
@@ -75,7 +81,7 @@ const RECIPES: (Recipe & { keys: string[] })[] = [
       "Toss in the rice and stir-fry 3 minutes until toasty.",
       "Mix everything, season, and serve hot.",
     ],
-    tip: "Cold day-old rice fries up fluffier than fresh rice!",
+    tip: "Cold day-old rice fries up fluffier than fresh rice — trust me on this one!",
   },
   {
     keys: ["bread", "cheese"],
@@ -89,7 +95,7 @@ const RECIPES: (Recipe & { keys: string[] })[] = [
       "Toast in a pan 2-3 minutes per side on medium heat.",
       "Slice diagonally — it always tastes better that way.",
     ],
-    tip: "Cover the pan for a minute so the cheese melts before the bread browns.",
+    tip: "Pop a lid on the pan for a minute so the cheese melts before the bread browns!",
   },
   {
     keys: ["flour", "milk", "eggs"],
@@ -103,7 +109,7 @@ const RECIPES: (Recipe & { keys: string[] })[] = [
       "Pour a thin swirl into a greased pan, cook 1 minute per side.",
       "Fill with syrup or banana slices and roll up.",
     ],
-    tip: "If the batter feels thick, splash in more milk — crepes love being runny.",
+    tip: "If the batter feels thick, splash in a little more milk — crepes love being runny!",
   },
   {
     keys: ["bananas"],
@@ -117,7 +123,7 @@ const RECIPES: (Recipe & { keys: string[] })[] = [
       "Add bananas, cook 1 minute per side until golden.",
       "Dust with cinnamon and eat warm.",
     ],
-    tip: "Spoon these over toast or yogurt for an instant dessert!",
+    tip: "Spoon these over toast or yogurt for an instant dessert — so cozy!",
   },
   {
     keys: ["tomatoes", "bread"],
@@ -131,12 +137,12 @@ const RECIPES: (Recipe & { keys: string[] })[] = [
       "Mash lightly, season, and pile onto the toast.",
       "Finish with a pinch of pepper.",
     ],
-    tip: "A tiny pinch of sugar tames extra-tangy tomatoes.",
+    tip: "A tiny pinch of sugar tames extra-tangy tomatoes — sneaky little trick!",
   },
 ];
 
 const FALLBACK: Recipe = {
-  title: "Chibi Chef's Pantry Scramble 🍳",
+  title: "Chef's Pantry Scramble 🍳",
   time: 10,
   method: "Stovetop",
   ingredients: ["Whatever you picked!", "1 tsp oil or butter", "Salt & pepper"],
@@ -146,27 +152,33 @@ const FALLBACK: Recipe = {
     "Cook the sturdiest items first, softest ones last.",
     "Season, taste, and plate it up with a smile.",
   ],
-  tip: "When in doubt: heat, fat, salt, and a little patience make anything tasty.",
+  tip: "When in doubt: heat, fat, salt and a little patience make anything tasty!",
 };
 
-function pickRecipe(items: string[], quickOnly: boolean, maxTime: number): Recipe {
+function pickRecipe(items: string[], quickOnly: boolean, filter: FilterId): Recipe {
+  const range = TIME_FILTERS.find((f) => f.id === filter)!;
   const lower = items.map((i) => i.toLowerCase());
   const scored = RECIPES.map((r) => ({
     r,
     score: r.keys.filter((k) => lower.some((l) => l.includes(k))).length / r.keys.length,
   }))
     .filter((s) => s.score > 0)
-    .filter((s) => (maxTime >= 20 ? true : s.r.time <= maxTime))
+    .filter((s) => s.r.time >= range.min && s.r.time <= range.max)
     .filter((s) => (quickOnly ? s.r.method !== "Oven" : true))
     .sort((a, b) => b.score - a.score || a.r.time - b.r.time);
-  return scored[0]?.r ?? { ...FALLBACK, time: Math.min(maxTime, 10) };
+  return scored[0]?.r ?? { ...FALLBACK, time: Math.max(5, Math.min(range.max, 10)) };
 }
 
+const INTRO_LINE =
+  "Oh hi there! 🍳 Got random ingredients and limited time? Let's make something yummy!";
+
 function Index() {
+  const [started, setStarted] = useState(false);
+  const [typed, setTyped] = useState("");
   const [selected, setSelected] = useState<string[]>(["Oats 🌾", "Milk 🥛"]);
   const [custom, setCustom] = useState("");
   const [quickOnly, setQuickOnly] = useState(true);
-  const [timeIdx, setTimeIdx] = useState(0);
+  const [filter, setFilter] = useState<FilterId>("quick");
   const [loading, setLoading] = useState(false);
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
@@ -174,17 +186,25 @@ function Index() {
   const [seconds, setSeconds] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Typewriter intro
   useEffect(() => {
-    if (seconds === null) return;
-    if (seconds <= 0) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      return;
-    }
+    if (started) return;
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setTyped(INTRO_LINE.slice(0, i));
+      if (i >= INTRO_LINE.length) clearInterval(id);
+    }, 32);
+    return () => clearInterval(id);
+  }, [started]);
+
+  useEffect(() => {
+    if (seconds === null || seconds <= 0) return;
     timerRef.current = setInterval(() => setSeconds((s) => (s === null ? null : s - 1)), 1000);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [seconds !== null, seconds === 0]);
+  }, [seconds]);
 
   const toggle = (item: string) =>
     setSelected((s) => (s.includes(item) ? s.filter((i) => i !== item) : [...s, item]));
@@ -203,42 +223,78 @@ function Index() {
     setChecked({});
     setSeconds(null);
     setTimeout(() => {
-      setRecipe(pickRecipe(selected, quickOnly, TIMES[timeIdx] ?? 5));
+      const r = pickRecipe(selected, quickOnly, filter);
+      setRecipe(r);
       setLoading(false);
       setSparkle(true);
-      setTimeout(() => setSparkle(false), 1600);
+      setTimeout(() => setSparkle(false), 1800);
     }, 1400);
   };
 
   const speech = loading
-    ? "Chibi Chef is stirring the pot... 🍲"
+    ? "Stirring the pot... 🍲"
     : recipe
       ? "Tadaa! Here's your cozy little recipe. Check off steps as you go! 💛"
       : selected.length
         ? `Ooh, ${selected.length} pantry treasure${selected.length > 1 ? "s" : ""}! Ready when you are.`
-        : "Kon'nichiwa! Select what's in your pantry, and I'll whip up something delicious!";
+        : "Select what's in your pantry, and I'll whip up something delicious!";
 
   const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+
+  if (!started) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-background px-4 py-10 text-foreground">
+        <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
+          <div className="mx-auto h-32 w-32 overflow-hidden rounded-full bg-accent/60 shadow-[var(--shadow-soft)]">
+            <img
+              src={chefMascot}
+              alt="Cozy chef mascot smiling"
+              width={768}
+              height={768}
+              className="h-56 w-32 max-w-none -translate-y-1 scale-[1.7] object-cover object-top"
+            />
+          </div>
+          <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
+            <span
+              className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 bg-secondary"
+              aria-hidden
+            />
+            <p className="min-h-[3.5rem]">
+              {typed}
+              <span className="animate-pulse">▌</span>
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setStarted(true)}
+            className="mt-6 w-full rounded-full bg-primary px-6 py-4 text-lg font-extrabold text-primary-foreground shadow-[var(--shadow-cozy)] transition-transform duration-200 hover:scale-105 active:scale-95"
+          >
+            Let&apos;s Cook! ✨
+          </button>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {/* Header & mascot */}
-        <header className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
+        <header className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             <img
               src={chefMascot}
-              alt="Chibi chef mascot holding a wooden spoon"
+              alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
-              className={`h-28 w-28 shrink-0 drop-shadow-md transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-105"}`}
+              className={`animate-scale-in h-32 w-32 shrink-0 drop-shadow-md transition-transform duration-500 ${loading ? "animate-bounce" : "hover:scale-105"}`}
             />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 Cozy Pantry
               </p>
               <h1 className="text-2xl font-extrabold leading-tight sm:text-3xl">
-                Recipe Companion 🍳
+                Cozy Pantry Recipe Companion 🍳
               </h1>
               <div className="relative mt-3 rounded-3xl bg-secondary px-4 py-3 text-sm font-medium text-secondary-foreground shadow-[var(--shadow-soft)]">
                 <span
@@ -254,7 +310,10 @@ function Index() {
         </header>
 
         {/* Ingredient selector */}
-        <section className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
+        <section
+          className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
+          style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
+        >
           <h2 className="text-lg font-bold">What&apos;s in your pantry?</h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {PANTRY.map((item) => {
@@ -267,7 +326,7 @@ function Index() {
                   aria-pressed={on}
                   className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 ${
                     on
-                      ? "border-transparent bg-secondary text-secondary-foreground shadow-[var(--shadow-soft)]"
+                      ? "border-transparent bg-mint text-secondary-foreground shadow-[var(--shadow-soft)]"
                       : "border-border bg-muted text-foreground hover:bg-accent"
                   }`}
                 >
@@ -307,7 +366,7 @@ function Index() {
               {selected.map((item) => (
                 <span
                   key={item}
-                  className="animate-scale-in flex items-center gap-2 rounded-full bg-card px-3 py-1.5 text-sm font-semibold shadow-[var(--shadow-soft)]"
+                  className="animate-scale-in flex items-center gap-2 rounded-full bg-mint px-3 py-1.5 text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]"
                 >
                   {item}
                   <button
@@ -325,7 +384,10 @@ function Index() {
         </section>
 
         {/* Preferences */}
-        <section className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
+        <section
+          className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
+          style={{ animationDelay: "220ms", animationFillMode: "backwards" }}
+        >
           <h2 className="text-lg font-bold">Quick preferences</h2>
           <div className="mt-4 flex items-center justify-between gap-4 rounded-3xl bg-muted px-4 py-3">
             <span className="text-sm font-semibold">No-Oven / Quick Stovetop only 🔥</span>
@@ -333,8 +395,9 @@ function Index() {
               type="button"
               role="switch"
               aria-checked={quickOnly}
+              aria-label="No-oven quick stovetop only"
               onClick={() => setQuickOnly((q) => !q)}
-              className={`relative h-8 w-14 rounded-full transition-colors duration-300 ${quickOnly ? "bg-secondary" : "bg-border"}`}
+              className={`relative h-8 w-14 rounded-full transition-colors duration-300 ${quickOnly ? "bg-mint" : "bg-border"}`}
             >
               <span
                 className={`absolute top-1 h-6 w-6 rounded-full bg-card shadow transition-all duration-300 ${quickOnly ? "left-7" : "left-1"}`}
@@ -343,27 +406,26 @@ function Index() {
           </div>
 
           <div className="mt-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold">Time to cook ⏱️</span>
-              <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">
-                {TIMES[timeIdx] === 20 ? "20+ min" : `${TIMES[timeIdx]} min`}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={3}
-              step={1}
-              value={timeIdx}
-              onChange={(e) => setTimeIdx(Number(e.target.value))}
-              aria-label="Maximum cooking time"
-              className="mt-3 w-full accent-[var(--primary)]"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>5</span>
-              <span>10</span>
-              <span>15</span>
-              <span>20+</span>
+            <span className="text-sm font-semibold">How much time do you have? ⏱️</span>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {TIME_FILTERS.map((f) => {
+                const on = filter === f.id;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => setFilter(f.id)}
+                    aria-pressed={on}
+                    className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 ${
+                      on
+                        ? "border-transparent bg-mint text-secondary-foreground shadow-[var(--shadow-soft)]"
+                        : "border-border bg-muted text-foreground hover:bg-accent"
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -373,7 +435,7 @@ function Index() {
           type="button"
           onClick={generate}
           disabled={loading}
-          className="rounded-3xl bg-primary px-6 py-5 text-lg font-extrabold text-primary-foreground shadow-[var(--shadow-cozy)] transition-all duration-200 hover:scale-105 hover:animate-pulse active:scale-95 disabled:opacity-70"
+          className="rounded-3xl bg-primary px-6 py-5 text-lg font-extrabold text-primary-foreground shadow-[var(--shadow-cozy)] transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-70"
         >
           {loading ? "Stirring the pot… 🍲" : "Cook Magic with Me ✨"}
         </button>
@@ -381,16 +443,14 @@ function Index() {
         {loading && (
           <div className="animate-fade-in rounded-3xl border border-border bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
             <div className="animate-bounce text-5xl">🍲</div>
-            <p className="mt-3 font-semibold">Chibi Chef is stirring the pot...</p>
+            <p className="mt-3 font-semibold">Chef is stirring the pot...</p>
             <p className="text-sm text-muted-foreground">Tasting, seasoning, sprinkling love…</p>
           </div>
         )}
 
         {/* Recipe card */}
         {recipe && !loading && (
-          <section
-            className={`animate-scale-in relative overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7 ${sparkle ? "ring-4 ring-secondary" : ""}`}
-          >
+          <section className="animate-scale-in relative overflow-hidden rounded-3xl border-2 border-dashed border-secondary bg-recipe p-5 shadow-[var(--shadow-cozy)] sm:p-7">
             {sparkle && (
               <div className="pointer-events-none absolute inset-0 animate-fade-in" aria-hidden>
                 {["✨", "⭐", "💛", "✨", "⭐", "💫"].map((s, i) => (
@@ -410,7 +470,7 @@ function Index() {
               <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">
                 ⏱️ {recipe.time} min
               </span>
-              <span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground">
+              <span className="rounded-full bg-mint px-3 py-1 text-xs font-bold text-secondary-foreground">
                 🍳 {recipe.method}
               </span>
               <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold">🟢 Beginner</span>
@@ -428,10 +488,14 @@ function Index() {
                       type="button"
                       onClick={() => setChecked((c) => ({ ...c, [k]: !c[k] }))}
                       className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-left text-sm transition-all duration-200 hover:scale-[1.01] ${
-                        checked[k] ? "bg-secondary/60 text-muted-foreground line-through" : "bg-muted"
+                        checked[k] ? "bg-mint/60 text-muted-foreground line-through" : "bg-card"
                       }`}
                     >
-                      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-border bg-card text-xs">
+                      <span
+                        className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border border-border text-xs font-bold ${
+                          checked[k] ? "bg-mint text-secondary-foreground" : "bg-card"
+                        }`}
+                      >
                         {checked[k] ? "✓" : ""}
                       </span>
                       {ing}
@@ -453,11 +517,17 @@ function Index() {
                       type="button"
                       onClick={() => setChecked((c) => ({ ...c, [k]: !c[k] }))}
                       className={`flex w-full items-start gap-3 rounded-2xl px-3 py-2 text-left text-sm transition-all duration-200 hover:scale-[1.01] ${
-                        checked[k] ? "bg-secondary/60 text-muted-foreground line-through" : "bg-muted"
+                        checked[k] ? "bg-mint/60 text-muted-foreground line-through" : "bg-card"
                       }`}
                     >
-                      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-                        {i + 1}
+                      <span
+                        className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-xs font-bold ${
+                          checked[k]
+                            ? "bg-mint text-secondary-foreground"
+                            : "bg-primary text-primary-foreground"
+                        }`}
+                      >
+                        {checked[k] ? "✓" : i + 1}
                       </span>
                       {step}
                     </button>
@@ -466,20 +536,31 @@ function Index() {
               })}
             </ol>
 
-            <div className="mt-6 flex items-start gap-3 rounded-3xl bg-accent/70 p-4">
-              <img
-                src={chefMascot}
-                alt=""
-                loading="lazy"
-                width={768}
-                height={768}
-                className="h-12 w-12 shrink-0"
-              />
-              <p className="text-sm font-medium">
-                <span className="font-bold">Chibi Chef pro-tip:</span> {recipe.tip}
-              </p>
+            {/* Chef's Thought */}
+            <div className="mt-6 flex items-start gap-3">
+              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full bg-accent/70 shadow-[var(--shadow-soft)]">
+                <img
+                  src={chefMascot}
+                  alt=""
+                  loading="lazy"
+                  width={768}
+                  height={768}
+                  className="h-24 w-14 max-w-none scale-[1.6] object-cover object-top"
+                />
+              </div>
+              <div className="relative flex-1 rounded-3xl bg-card px-4 py-3 shadow-[var(--shadow-soft)]">
+                <span
+                  className="absolute -left-1.5 top-6 h-3 w-3 rotate-45 bg-card"
+                  aria-hidden
+                />
+                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  Chef&apos;s Thought 💭
+                </p>
+                <p className="mt-1 text-sm font-medium">{recipe.tip}</p>
+              </div>
             </div>
 
+            {/* Auto timer */}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <button
                 type="button"
@@ -488,10 +569,12 @@ function Index() {
                   seconds !== null && seconds > 0 ? "animate-pulse" : ""
                 }`}
               >
-                {seconds === null ? `Start ${recipe.time}-Min Timer ⏲️` : "Stop timer ⏹️"}
+                {seconds === null
+                  ? `Start ${recipe.time}-Min Cooking Timer ⏱️`
+                  : "Stop timer ⏹️"}
               </button>
               {seconds !== null && (
-                <span className="rounded-full bg-secondary px-4 py-2 font-mono text-lg font-bold text-secondary-foreground">
+                <span className="rounded-full bg-mint px-4 py-2 font-mono text-lg font-bold text-secondary-foreground">
                   {seconds > 0 ? mmss(seconds) : "Ding! 🔔 It's ready!"}
                 </span>
               )}
@@ -500,7 +583,7 @@ function Index() {
         )}
 
         <footer className="pb-6 text-center text-xs text-muted-foreground">
-          Made cozy with love · Chibi Chef says: eat something warm today 💛
+          Made cozy with love · Your chef says: eat something warm today 💛
         </footer>
       </div>
     </main>
