@@ -325,12 +325,12 @@ function Index() {
           <h2 className="font-fredoka text-lg font-bold">What&apos;s in your pantry?</h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {PANTRY.map((item) => {
-              const on = selected.includes(item);
+              const on = selected.includes(item.name);
               return (
                 <button
-                  key={item}
+                  key={item.name}
                   type="button"
-                  onClick={() => toggle(item)}
+                  onClick={() => toggle(item.name)}
                   aria-pressed={on}
                   className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 ${
                     on
@@ -338,7 +338,7 @@ function Index() {
                       : "border-border bg-muted text-foreground hover:bg-accent"
                   }`}
                 >
-                  {item}&nbsp;
+                  {item.symbol}&nbsp;{item.name}
                 </button>
               );
             })}
