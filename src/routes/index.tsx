@@ -246,15 +246,15 @@ function Index() {
     return (
       <main className="grid min-h-screen place-items-center bg-background px-4 py-10 font-nunito text-foreground">
         <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
-          <div className="mx-auto flex h-32 w-32 items-center justify-center sm:h-40 sm:w-40">
+          <div className="mx-auto flex h-44 w-44 items-center justify-center sm:h-56 sm:w-56">
             <img
-              src={chefMascot}
+              src={chefMascot.url}
               alt="Cozy chef mascot smiling"
               width={768}
               height={768}
               loading="eager"
               decoding="async"
-              className="h-28 w-28 object-contain [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)] sm:h-32 sm:w-32"
+              className="h-40 w-40 object-contain sm:h-52 sm:w-52"
             />
           </div>
           <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
@@ -286,7 +286,7 @@ function Index() {
         <header className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             <img
-              src={chefMascot}
+              src={chefMascot.url}
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
@@ -543,14 +543,14 @@ function Index() {
 
             {/* Chef's Thought */}
             <div className="mt-6 flex items-start gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-end justify-center sm:h-16 sm:w-16">
+              <div className="flex h-14 w-14 shrink-0 items-end justify-center sm:h-20 sm:w-20">
                 <img
-                  src={chefMascot}
+                  src={chefMascot.url}
                   alt=""
                   loading="eager"
                   width={768}
                   height={768}
-                  className="h-12 w-12 object-contain [mask-image:linear-gradient(to_bottom,black_55%,transparent_100%)] sm:h-16 sm:w-16"
+                  className="h-14 w-14 object-contain sm:h-20 sm:w-20"
                 />
               </div>
               <div className="relative flex-1 rounded-3xl bg-card px-4 py-3 shadow-[var(--shadow-soft)]">
