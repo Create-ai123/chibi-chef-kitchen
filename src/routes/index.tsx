@@ -25,17 +25,20 @@ export const Route = createFileRoute("/")({
 });
 
 const PANTRY = [
-  "Oats",
-  "Milk",
-  "Flour",
-  "Eggs",
-  "Tomatoes",
-  "Chocolate Syrup",
-  "Bananas",
-  "Bread",
-  "Rice",
-  "Cheese",
+  { name: "Oats", symbol: "🥣" },
+  { name: "Milk", symbol: "🥛" },
+  { name: "Flour", symbol: "🌾" },
+  { name: "Eggs", symbol: "🥚" },
+  { name: "Tomatoes", symbol: "🍅" },
+  { name: "Chocolate Syrup", symbol: "🍫" },
+  { name: "Bananas", symbol: "🍌" },
+  { name: "Bread", symbol: "🍞" },
+  { name: "Rice", symbol: "🍚" },
+  { name: "Cheese", symbol: "🧀" },
 ];
+
+const symbolFor = (name: string) =>
+  PANTRY.find((p) => p.name === name)?.symbol ?? "🥄";
 
 const TIME_FILTERS = [
   { id: "quick", label: "⚡ Under 5 mins", min: 0, max: 5 },
