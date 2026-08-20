@@ -246,7 +246,7 @@ function Index() {
     return (
       <main className="grid min-h-screen place-items-center bg-background px-4 py-10 font-nunito text-foreground">
         <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
-          <div className="mx-auto flex h-44 w-44 items-center justify-center sm:h-56 sm:w-56">
+          <div className="mx-auto flex h-52 w-52 items-center justify-center sm:h-64 sm:w-64">
             <img
               src={chefMascot.url}
               alt="Cozy chef mascot smiling"
@@ -254,7 +254,7 @@ function Index() {
               height={768}
               loading="eager"
               decoding="async"
-              className="h-40 w-40 object-contain sm:h-52 sm:w-52"
+              className="h-48 w-48 object-contain sm:h-60 sm:w-60"
             />
           </div>
           <div className="relative mt-6 rounded-3xl bg-secondary px-5 py-4 text-left text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]">
