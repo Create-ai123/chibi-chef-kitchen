@@ -25,17 +25,20 @@ export const Route = createFileRoute("/")({
 });
 
 const PANTRY = [
-  "Oats",
-  "Milk",
-  "Flour",
-  "Eggs",
-  "Tomatoes",
-  "Chocolate Syrup",
-  "Bananas",
-  "Bread",
-  "Rice",
-  "Cheese",
+  { name: "Oats", symbol: "🥣" },
+  { name: "Milk", symbol: "🥛" },
+  { name: "Flour", symbol: "🌾" },
+  { name: "Eggs", symbol: "🥚" },
+  { name: "Tomatoes", symbol: "🍅" },
+  { name: "Chocolate Syrup", symbol: "🍫" },
+  { name: "Bananas", symbol: "🍌" },
+  { name: "Bread", symbol: "🍞" },
+  { name: "Rice", symbol: "🍚" },
+  { name: "Cheese", symbol: "🧀" },
 ];
+
+const symbolFor = (name: string) =>
+  PANTRY.find((p) => p.name === name)?.symbol ?? "🥄";
 
 const TIME_FILTERS = [
   { id: "quick", label: "⚡ Under 5 mins", min: 0, max: 5 },
@@ -322,12 +325,12 @@ function Index() {
           <h2 className="font-fredoka text-lg font-bold">What&apos;s in your pantry?</h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {PANTRY.map((item) => {
-              const on = selected.includes(item);
+              const on = selected.includes(item.name);
               return (
                 <button
-                  key={item}
+                  key={item.name}
                   type="button"
-                  onClick={() => toggle(item)}
+                  onClick={() => toggle(item.name)}
                   aria-pressed={on}
                   className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 ${
                     on
@@ -335,7 +338,7 @@ function Index() {
                       : "border-border bg-muted text-foreground hover:bg-accent"
                   }`}
                 >
-                  {item}&nbsp;
+                  {item.symbol}&nbsp;{item.name}
                 </button>
               );
             })}
@@ -373,7 +376,7 @@ function Index() {
                   key={item}
                   className="animate-scale-in flex items-center gap-2 rounded-full bg-mint px-3 py-1.5 text-sm font-semibold text-secondary-foreground shadow-[var(--shadow-soft)]"
                 >
-                  {item}&nbsp;
+                  {symbolFor(item)}&nbsp;{item}
                   <button
                     type="button"
                     aria-label={`Remove ${item}`}
