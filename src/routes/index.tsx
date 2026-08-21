@@ -595,6 +595,31 @@ function Index() {
           Made with love · Your chef says: eat something warm today 💛
         </footer>
       </div>
+
+      {/* Floating scroll mascot (head only) */}
+      <div
+        aria-hidden={!floatVisible}
+        className={`pointer-events-none fixed right-1 top-1/3 z-40 flex max-w-[42vw] flex-col items-center transition-all duration-500 sm:right-3 sm:max-w-none ${
+          floatVisible ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
+        }`}
+        style={{ transform: floatVisible ? `translateY(${bob}px)` : undefined }}
+      >
+        <div className="mb-2 max-w-[38vw] rounded-2xl bg-secondary px-3 py-2 text-center text-[11px] font-semibold text-secondary-foreground shadow-[var(--shadow-soft)] sm:max-w-[14rem] sm:text-sm">
+          <p key={floatMsg} className="animate-fade-in font-nunito">
+            {floatMsg}
+          </p>
+        </div>
+        <img
+          src={chefMascot.url}
+          alt=""
+          width={768}
+          height={768}
+          loading="eager"
+          decoding="async"
+          className="h-16 w-16 object-contain sm:h-24 sm:w-24"
+        />
+      </div>
+
     </main>
   );
 }
