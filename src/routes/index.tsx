@@ -238,11 +238,10 @@ function Index() {
 
   const speech = loading
     ? "Stirring the pot... 🍲"
-    : recipe
-      ? "Tadaa! Here's your recipe. Check off steps as you go! 💛"
-      : selected.length
-        ? `Ooh, ${selected.length} pantry treasure${selected.length > 1 ? "s" : ""}! Ready when you are.`
-        : "Select what's in your pantry, and I'll whip up something delicious!";
+    : selected.length
+      ? `Ooh, ${selected.length} pantry treasure${selected.length > 1 ? "s" : ""}! Ready when you are.`
+      : "Select what's in your pantry, and I'll whip up something delicious!";
+
 
   const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
