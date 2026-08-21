@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import chefMascot from "@/assets/chibi-chef.png.asset.json";
+import chefFull from "@/assets/chef-full.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -189,6 +190,51 @@ function Index() {
   const [seconds, setSeconds] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Floating scroll mascot
+  const headerRef = useRef<HTMLElement | null>(null);
+  const pantryRef = useRef<HTMLElement | null>(null);
+  const prefsRef = useRef<HTMLElement | null>(null);
+  const stepsRef = useRef<HTMLOListElement | null>(null);
+  const [floatVisible, setFloatVisible] = useState(false);
+  const [floatMsg, setFloatMsg] = useState("Item's please!!");
+  const [bob, setBob] = useState(0);
+
+  useEffect(() => {
+    if (!started) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
+      setFloatVisible(headerBottom < 0);
+      setBob(Math.sin(window.scrollY / 90) * 10);
+
+      const stepsTop = stepsRef.current?.getBoundingClientRect().top;
+      const prefsTop = prefsRef.current?.getBoundingClientRect().top;
+      if (recipe && stepsTop !== undefined && stepsTop < vh * 0.7) {
+        setFloatMsg(`Chef's Thought 💭 ${recipe.tip}`);
+      } else if (recipe) {
+        setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
+      } else if (prefsTop !== undefined && prefsTop < vh * 0.6) {
+        setFloatMsg("Oven or No-Oven?");
+      } else {
+        setFloatMsg("Item's please!!");
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [started, recipe]);
+
+
   // Typewriter intro
   useEffect(() => {
     if (started) return;
@@ -237,11 +283,10 @@ function Index() {
 
   const speech = loading
     ? "Stirring the pot... 🍲"
-    : recipe
-      ? "Tadaa! Here's your recipe. Check off steps as you go! 💛"
-      : selected.length
-        ? `Ooh, ${selected.length} pantry treasure${selected.length > 1 ? "s" : ""}! Ready when you are.`
-        : "Select what's in your pantry, and I'll whip up something delicious!";
+    : selected.length
+      ? `Ooh, ${selected.length} pantry treasure${selected.length > 1 ? "s" : ""}! Ready when you are.`
+      : "Select what's in your pantry, and I'll whip up something delicious!";
+
 
   const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
@@ -286,17 +331,18 @@ function Index() {
     <main className="min-h-screen bg-background px-4 py-8 font-nunito text-foreground sm:px-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {/* Header & mascot */}
-        <header className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
+        <header ref={headerRef} className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             <img
-              src={chefMascot.url}
+              src={chefFull.url}
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
               loading="eager"
               decoding="async"
-              className="h-20 w-20 shrink-0 object-contain sm:h-28 sm:w-28"
+              className="h-24 w-24 shrink-0 object-contain sm:h-32 sm:w-32"
             />
+
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 Cozy Pantry
@@ -319,6 +365,8 @@ function Index() {
 
         {/* Ingredient selector */}
         <section
+          ref={pantryRef}
+
           className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
           style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
         >
@@ -393,6 +441,8 @@ function Index() {
 
         {/* Preferences */}
         <section
+          ref={prefsRef}
+
           className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
           style={{ animationDelay: "220ms", animationFillMode: "backwards" }}
         >
@@ -516,7 +566,7 @@ function Index() {
             <h3 className="mt-6 text-sm font-bold uppercase tracking-widest text-muted-foreground">
               Steps
             </h3>
-            <ol className="mt-2 space-y-2">
+            <ol ref={stepsRef} className="mt-2 space-y-2">
               {recipe.steps.map((step, i) => {
                 const k = `s-${i}`;
                 return (
@@ -594,6 +644,31 @@ function Index() {
           Made with love · Your chef says: eat something warm today 💛
         </footer>
       </div>
+
+      {/* Floating scroll mascot (head only) */}
+      <div
+        aria-hidden={!floatVisible}
+        className={`pointer-events-none fixed right-1 top-1/3 z-40 flex max-w-[42vw] flex-col items-center transition-all duration-500 sm:right-3 sm:max-w-none ${
+          floatVisible ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
+        }`}
+        style={{ transform: floatVisible ? `translateY(${bob}px)` : undefined }}
+      >
+        <div className="mb-2 max-w-[38vw] rounded-2xl bg-secondary px-3 py-2 text-center text-[11px] font-semibold text-secondary-foreground shadow-[var(--shadow-soft)] sm:max-w-[14rem] sm:text-sm">
+          <p key={floatMsg} className="animate-fade-in font-nunito">
+            {floatMsg}
+          </p>
+        </div>
+        <img
+          src={chefMascot.url}
+          alt=""
+          width={768}
+          height={768}
+          loading="eager"
+          decoding="async"
+          className="h-16 w-16 object-contain sm:h-24 sm:w-24"
+        />
+      </div>
+
     </main>
   );
 }
