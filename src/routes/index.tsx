@@ -517,7 +517,7 @@ function Index() {
             <h3 className="mt-6 text-sm font-bold uppercase tracking-widest text-muted-foreground">
               Steps
             </h3>
-            <ol className="mt-2 space-y-2">
+            <ol ref={stepsRef} className="mt-2 space-y-2">
               {recipe.steps.map((step, i) => {
                 const k = `s-${i}`;
                 return (
