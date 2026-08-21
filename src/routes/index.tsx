@@ -394,6 +394,8 @@ function Index() {
 
         {/* Preferences */}
         <section
+          ref={prefsRef}
+
           className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
           style={{ animationDelay: "220ms", animationFillMode: "backwards" }}
         >
