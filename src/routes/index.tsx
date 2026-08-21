@@ -320,6 +320,8 @@ function Index() {
 
         {/* Ingredient selector */}
         <section
+          ref={pantryRef}
+
           className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
           style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
         >
