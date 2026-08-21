@@ -287,17 +287,18 @@ function Index() {
     <main className="min-h-screen bg-background px-4 py-8 font-nunito text-foreground sm:px-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {/* Header & mascot */}
-        <header className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
+        <header ref={headerRef} className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             <img
-              src={chefMascot.url}
+              src={chefFull.url}
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
               loading="eager"
               decoding="async"
-              className="h-20 w-20 shrink-0 object-contain sm:h-28 sm:w-28"
+              className="h-24 w-24 shrink-0 object-contain sm:h-32 sm:w-32"
             />
+
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 Cozy Pantry
