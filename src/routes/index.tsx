@@ -190,6 +190,51 @@ function Index() {
   const [seconds, setSeconds] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Floating scroll mascot
+  const headerRef = useRef<HTMLElement | null>(null);
+  const pantryRef = useRef<HTMLElement | null>(null);
+  const prefsRef = useRef<HTMLElement | null>(null);
+  const stepsRef = useRef<HTMLOListElement | null>(null);
+  const [floatVisible, setFloatVisible] = useState(false);
+  const [floatMsg, setFloatMsg] = useState("Item's please!!");
+  const [bob, setBob] = useState(0);
+
+  useEffect(() => {
+    if (!started) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
+      setFloatVisible(headerBottom < 0);
+      setBob(Math.sin(window.scrollY / 90) * 10);
+
+      const stepsTop = stepsRef.current?.getBoundingClientRect().top;
+      const prefsTop = prefsRef.current?.getBoundingClientRect().top;
+      if (recipe && stepsTop !== undefined && stepsTop < vh * 0.7) {
+        setFloatMsg(`Chef's Thought 💭 ${recipe.tip}`);
+      } else if (recipe) {
+        setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
+      } else if (prefsTop !== undefined && prefsTop < vh * 0.6) {
+        setFloatMsg("Oven or No-Oven?");
+      } else {
+        setFloatMsg("Item's please!!");
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [started, recipe]);
+
+
   // Typewriter intro
   useEffect(() => {
     if (started) return;
