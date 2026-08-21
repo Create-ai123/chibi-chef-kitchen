@@ -212,13 +212,13 @@ function Index() {
       const stepsTop = stepsRef.current?.getBoundingClientRect().top;
       const prefsTop = prefsRef.current?.getBoundingClientRect().top;
       if (recipe && stepsTop !== undefined && stepsTop < vh * 0.7) {
-        setFloatMsg("Check off each step as you go! 💛");
+        setFloatMsg(`Chef's Thought 💭 ${recipe.tip}`);
       } else if (recipe) {
-        setFloatMsg("Tadaa! Here's your recipe. Dig in! ✨");
+        setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
       } else if (prefsTop !== undefined && prefsTop < vh * 0.6) {
-        setFloatMsg("Oven or No-Oven? Pick your time too! ⏱️");
+        setFloatMsg("Oven or No-Oven?");
       } else {
-        setFloatMsg("What's in your pantry? Pick your treasures! 🥣");
+        setFloatMsg("Item's please!!");
       }
     };
     const onScroll = () => {
@@ -594,6 +594,29 @@ function Index() {
               })}
             </ol>
 
+            {/* Chef's Thought */}
+            <div className="mt-6 flex items-start gap-3">
+              <div className="flex h-14 w-14 shrink-0 items-end justify-center sm:h-20 sm:w-20">
+                <img
+                  src={chefMascot.url}
+                  alt=""
+                  loading="eager"
+                  width={768}
+                  height={768}
+                  className="h-14 w-14 object-contain sm:h-20 sm:w-20"
+                />
+              </div>
+              <div className="relative flex-1 rounded-3xl bg-card px-4 py-3 shadow-[var(--shadow-soft)]">
+                <span
+                  className="absolute -left-1.5 top-6 h-3 w-3 rotate-45 bg-card"
+                  aria-hidden
+                />
+                <p className="font-fredoka text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  Chef&apos;s Thought 💭
+                </p>
+                <p className="mt-1 text-sm font-medium">{recipe.tip}</p>
+              </div>
+            </div>
 
             {/* Auto timer */}
             <div className="mt-6 flex flex-wrap items-center gap-3">
