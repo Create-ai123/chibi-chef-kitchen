@@ -212,13 +212,13 @@ function Index() {
       const stepsTop = stepsRef.current?.getBoundingClientRect().top;
       const prefsTop = prefsRef.current?.getBoundingClientRect().top;
       if (recipe && stepsTop !== undefined && stepsTop < vh * 0.7) {
-        setFloatMsg(`Chef's Thought 💭 ${recipe.tip}`);
+        setFloatMsg("Check off each step as you go! 💛");
       } else if (recipe) {
-        setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
+        setFloatMsg("Tadaa! Here's your recipe. Dig in! ✨");
       } else if (prefsTop !== undefined && prefsTop < vh * 0.6) {
-        setFloatMsg("Oven or No-Oven?");
+        setFloatMsg("Oven or No-Oven? Pick your time too! ⏱️");
       } else {
-        setFloatMsg("Item's please!!");
+        setFloatMsg("What's in your pantry? Pick your treasures! 🥣");
       }
     };
     const onScroll = () => {
