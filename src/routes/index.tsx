@@ -206,14 +206,16 @@ function Index() {
       raf = 0;
       const vh = window.innerHeight;
       const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
-      setFloatVisible(headerBottom < 0);
       setBob(Math.sin(window.scrollY / 90) * 10);
 
       const stepsTop = stepsRef.current?.getBoundingClientRect().top;
       const prefsTop = prefsRef.current?.getBoundingClientRect().top;
-      if (recipe && stepsTop !== undefined && stepsTop < vh * 0.7) {
-        setFloatMsg(`Chef's Thought 💭 ${recipe.tip}`);
-      } else if (recipe) {
+      // Hide the floating mascot once the Steps section approaches, so it never
+      // overlaps ingredients, Chef's Thought, steps, checklist or the timer.
+      const nearSteps = stepsTop !== undefined && stepsTop < vh * 0.9;
+      setFloatVisible(headerBottom < 0 && !nearSteps);
+
+      if (recipe) {
         setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
       } else if (prefsTop !== undefined && prefsTop < vh * 0.6) {
         setFloatMsg("Oven or No-Oven?");
@@ -221,6 +223,7 @@ function Index() {
         setFloatMsg("Item's please!!");
       }
     };
+
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
     };
