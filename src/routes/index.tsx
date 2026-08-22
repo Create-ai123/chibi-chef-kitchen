@@ -206,14 +206,16 @@ function Index() {
       raf = 0;
       const vh = window.innerHeight;
       const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
-      setFloatVisible(headerBottom < 0);
       setBob(Math.sin(window.scrollY / 90) * 10);
 
       const stepsTop = stepsRef.current?.getBoundingClientRect().top;
       const prefsTop = prefsRef.current?.getBoundingClientRect().top;
-      if (recipe && stepsTop !== undefined && stepsTop < vh * 0.7) {
-        setFloatMsg(`Chef's Thought 💭 ${recipe.tip}`);
-      } else if (recipe) {
+      // Hide the floating mascot once the Steps section approaches, so it never
+      // overlaps ingredients, Chef's Thought, steps, checklist or the timer.
+      const nearSteps = stepsTop !== undefined && stepsTop < vh * 0.9;
+      setFloatVisible(headerBottom < 0 && !nearSteps);
+
+      if (recipe) {
         setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
       } else if (prefsTop !== undefined && prefsTop < vh * 0.6) {
         setFloatMsg("Oven or No-Oven?");
@@ -221,6 +223,7 @@ function Index() {
         setFloatMsg("Item's please!!");
       }
     };
+
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
     };
@@ -312,7 +315,7 @@ function Index() {
             />
             <p className="min-h-[3.5rem] font-nunito">
               {typed}
-              <span className="animate-pulse">▌</span>
+              <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse align-middle bg-current" />
             </p>
           </div>
           <button
@@ -406,7 +409,7 @@ function Index() {
               onClick={addCustom}
               className="rounded-full bg-accent px-5 py-2 text-sm font-bold text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
             >
-              Add ➕
+              Add +
             </button>
           </div>
 
@@ -431,7 +434,7 @@ function Index() {
                     onClick={() => toggle(item)}
                     className="grid h-5 w-5 place-items-center rounded-full bg-primary text-xs text-primary-foreground transition-transform hover:scale-110"
                   >
-                    ✕
+                    ×
                   </button>
                 </span>
               ))}
@@ -554,7 +557,7 @@ function Index() {
                           checked[k] ? "bg-mint text-secondary-foreground" : "bg-card"
                         }`}
                       >
-                        {checked[k] ? "✓" : ""}
+                        {checked[k] ? "✔" : ""}
                       </span>
                       {ing}
                     </button>
@@ -585,7 +588,7 @@ function Index() {
                             : "bg-primary text-primary-foreground"
                         }`}
                       >
-                        {checked[k] ? "✓" : i + 1}
+                        {checked[k] ? "✔" : i + 1}
                       </span>
                       {step}
                     </button>
@@ -629,7 +632,7 @@ function Index() {
               >
                 {seconds === null
                   ? `Start ${recipe.time}-Min Cooking Timer ⏱️`
-                  : "Stop timer ⏹️"}
+                  : "Stop timer 🛑"}
               </button>
               {seconds !== null && (
                 <span className="rounded-full bg-mint px-4 py-2 font-mono text-lg font-bold text-secondary-foreground">
