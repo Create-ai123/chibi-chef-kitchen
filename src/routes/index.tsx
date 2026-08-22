@@ -312,7 +312,7 @@ function Index() {
             />
             <p className="min-h-[3.5rem] font-nunito">
               {typed}
-              <span className="animate-pulse">▌</span>
+              <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse align-middle bg-current" />
             </p>
           </div>
           <button
@@ -406,7 +406,7 @@ function Index() {
               onClick={addCustom}
               className="rounded-full bg-accent px-5 py-2 text-sm font-bold text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
             >
-              Add ➕
+              Add +
             </button>
           </div>
 
@@ -431,7 +431,7 @@ function Index() {
                     onClick={() => toggle(item)}
                     className="grid h-5 w-5 place-items-center rounded-full bg-primary text-xs text-primary-foreground transition-transform hover:scale-110"
                   >
-                    ✕
+                    ×
                   </button>
                 </span>
               ))}
@@ -554,7 +554,7 @@ function Index() {
                           checked[k] ? "bg-mint text-secondary-foreground" : "bg-card"
                         }`}
                       >
-                        {checked[k] ? "✓" : ""}
+                        {checked[k] ? "✔" : ""}
                       </span>
                       {ing}
                     </button>
@@ -585,7 +585,7 @@ function Index() {
                             : "bg-primary text-primary-foreground"
                         }`}
                       >
-                        {checked[k] ? "✓" : i + 1}
+                        {checked[k] ? "✔" : i + 1}
                       </span>
                       {step}
                     </button>
@@ -629,7 +629,7 @@ function Index() {
               >
                 {seconds === null
                   ? `Start ${recipe.time}-Min Cooking Timer ⏱️`
-                  : "Stop timer ⏹️"}
+                  : "Stop timer 🛑"}
               </button>
               {seconds !== null && (
                 <span className="rounded-full bg-mint px-4 py-2 font-mono text-lg font-bold text-secondary-foreground">
