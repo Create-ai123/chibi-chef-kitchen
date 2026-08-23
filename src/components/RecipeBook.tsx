@@ -7,9 +7,10 @@ type Props = {
   onUpdate: (id: string, patch: Partial<Pick<SavedRecipe, "title" | "notes" | "favorite">>) => void;
   onRemove: (id: string) => void;
   onToast: (msg: string) => void;
+  onBack?: () => void;
 };
 
-export function RecipeBook({ book, mascotUrl, onUpdate, onRemove, onToast }: Props) {
+export function RecipeBook({ book, mascotUrl, onUpdate, onRemove, onToast, onBack }: Props) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [editId, setEditId] = useState<string | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
@@ -40,22 +41,33 @@ export function RecipeBook({ book, mascotUrl, onUpdate, onRemove, onToast }: Pro
       id="recipe-book"
       className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7"
     >
-      <div className="flex items-center gap-3">
-        <img
-          src={mascotUrl}
-          alt=""
-          width={768}
-          height={768}
-          loading="lazy"
-          decoding="async"
-          className="h-12 w-12 shrink-0 object-contain sm:h-16 sm:w-16"
-        />
-        <div>
-          <h2 className="font-fredoka text-lg font-bold">My Recipe Book 📖✨</h2>
-          <p className="text-xs text-muted-foreground">
-            {book.length} saved {book.length === 1 ? "recipe" : "recipes"}
-          </p>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <img
+            src={mascotUrl}
+            alt=""
+            width={768}
+            height={768}
+            loading="lazy"
+            decoding="async"
+            className="h-12 w-12 shrink-0 object-contain sm:h-16 sm:w-16"
+          />
+          <div>
+            <h2 className="font-fredoka text-lg font-bold">My Recipe Book 📖✨</h2>
+            <p className="text-xs text-muted-foreground">
+              {book.length} saved {book.length === 1 ? "recipe" : "recipes"}
+            </p>
+          </div>
         </div>
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="shrink-0 rounded-full bg-muted px-3 py-2 font-fredoka text-xs font-bold transition-transform duration-200 hover:scale-105 active:scale-95"
+          >
+            ← Back to Pantry
+          </button>
+        )}
       </div>
 
       {book.length === 0 ? (

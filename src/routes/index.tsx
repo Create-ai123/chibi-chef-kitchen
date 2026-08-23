@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import chefMascot from "@/assets/chibi-chef.png.asset.json";
 import chefFull from "@/assets/chef-full.png.asset.json";
+import { RecipeBook } from "@/components/RecipeBook";
+import { useRecipeBook } from "@/lib/recipe-book";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -190,6 +192,11 @@ function Index() {
   const [seconds, setSeconds] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Recipe book
+  const { book, save, update, remove, isSaved } = useRecipeBook();
+  const [showBook, setShowBook] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
   // Floating scroll mascot
   const headerRef = useRef<HTMLElement | null>(null);
   const pantryRef = useRef<HTMLElement | null>(null);
@@ -213,7 +220,7 @@ function Index() {
       // Hide the floating mascot once the Steps section approaches, so it never
       // overlaps ingredients, Chef's Thought, steps, checklist or the timer.
       const nearSteps = stepsTop !== undefined && stepsTop < vh * 0.9;
-      setFloatVisible(headerBottom < 0 && !nearSteps);
+      setFloatVisible(headerBottom < 0 && !nearSteps && !showBook);
 
       if (recipe) {
         setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
@@ -235,7 +242,14 @@ function Index() {
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [started, recipe]);
+  }, [started, recipe, showBook]);
+
+  // Toast auto-hide
+  useEffect(() => {
+    if (!toast) return;
+    const id = setTimeout(() => setToast(null), 2200);
+    return () => clearTimeout(id);
+  }, [toast]);
 
 
   // Typewriter intro
@@ -347,12 +361,23 @@ function Index() {
             />
 
             <div className="flex-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                Cozy Pantry
-              </p>
-              <h1 className="font-fredoka text-2xl font-extrabold leading-tight sm:text-3xl">
-                Recipe Companion 🍳
-              </h1>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Cozy Pantry
+                  </p>
+                  <h1 className="font-fredoka text-2xl font-extrabold leading-tight sm:text-3xl">
+                    Recipe Companion 🍳
+                  </h1>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowBook(true)}
+                  className="shrink-0 rounded-full bg-accent px-3 py-2 font-fredoka text-xs font-bold text-accent-foreground shadow-[var(--shadow-soft)] transition-transform duration-200 hover:scale-105 active:scale-95"
+                >
+                  📖 My Recipe Book
+                </button>
+              </div>
               <div className="relative mt-3 rounded-3xl bg-secondary px-4 py-3 text-sm font-medium text-secondary-foreground shadow-[var(--shadow-soft)]">
                 <span
                   className="absolute -top-2 left-6 h-4 w-4 rotate-45 bg-secondary sm:-left-2 sm:top-5"
@@ -366,7 +391,18 @@ function Index() {
           </div>
         </header>
 
-        {/* Ingredient selector */}
+        {showBook ? (
+          <RecipeBook
+            book={book}
+            mascotUrl={chefMascot.url}
+            onUpdate={update}
+            onRemove={remove}
+            onToast={setToast}
+            onBack={() => setShowBook(false)}
+          />
+        ) : (
+          <>
+            {/* Ingredient selector */}
         <section
           ref={pantryRef}
 
@@ -526,7 +562,37 @@ function Index() {
               </div>
             )}
 
-            <h2 className="font-fredoka text-2xl font-extrabold">{recipe.title}</h2>
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="font-fredoka text-2xl font-extrabold">{recipe.title}</h2>
+              {(() => {
+                const alreadySaved = isSaved(recipe.title, recipe.steps);
+                return (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const saved = save({
+                        title: recipe.title,
+                        description: recipe.tip,
+                        ingredients: recipe.ingredients,
+                        steps: recipe.steps,
+                        time: recipe.time,
+                        method: recipe.method,
+                        difficulty: "Beginner",
+                      });
+                      if (saved) setToast("Recipe saved! 🥰");
+                    }}
+                    disabled={alreadySaved}
+                    className={`shrink-0 rounded-full px-3 py-2 font-fredoka text-xs font-bold transition-transform duration-200 hover:scale-105 active:scale-95 ${
+                      alreadySaved
+                        ? "bg-muted text-muted-foreground"
+                        : "bg-accent text-accent-foreground shadow-[var(--shadow-soft)]"
+                    }`}
+                  >
+                    {alreadySaved ? "Saved ♥" : "♡ Save Recipe"}
+                  </button>
+                );
+              })()}
+            </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="rounded-full bg-accent px-3 py-1 font-fredoka text-xs font-bold text-accent-foreground">
                 ⏱️ {recipe.time} min
@@ -643,6 +709,9 @@ function Index() {
           </section>
         )}
 
+          </>
+        )}
+
         <footer className="pb-6 text-center text-xs text-muted-foreground">
           Made with love · Your chef says: eat something warm today 💛
         </footer>
@@ -670,6 +739,16 @@ function Index() {
           decoding="async"
           className="h-16 w-16 object-contain sm:h-24 sm:w-24"
         />
+      </div>
+
+      {/* Toast */}
+      <div
+        aria-live="polite"
+        className={`fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform rounded-full bg-primary px-5 py-2.5 font-fredoka text-sm font-bold text-primary-foreground shadow-[var(--shadow-cozy)] transition-all duration-300 ${
+          toast ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
+        }`}
+      >
+        {toast}
       </div>
 
     </main>
