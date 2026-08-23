@@ -361,12 +361,23 @@ function Index() {
             />
 
             <div className="flex-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                Cozy Pantry
-              </p>
-              <h1 className="font-fredoka text-2xl font-extrabold leading-tight sm:text-3xl">
-                Recipe Companion 🍳
-              </h1>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Cozy Pantry
+                  </p>
+                  <h1 className="font-fredoka text-2xl font-extrabold leading-tight sm:text-3xl">
+                    Recipe Companion 🍳
+                  </h1>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowBook(true)}
+                  className="shrink-0 rounded-full bg-accent px-3 py-2 font-fredoka text-xs font-bold text-accent-foreground shadow-[var(--shadow-soft)] transition-transform duration-200 hover:scale-105 active:scale-95"
+                >
+                  📖 My Recipe Book
+                </button>
+              </div>
               <div className="relative mt-3 rounded-3xl bg-secondary px-4 py-3 text-sm font-medium text-secondary-foreground shadow-[var(--shadow-soft)]">
                 <span
                   className="absolute -top-2 left-6 h-4 w-4 rotate-45 bg-secondary sm:-left-2 sm:top-5"
