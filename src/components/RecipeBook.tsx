@@ -10,7 +10,7 @@ type Props = {
   onBack?: () => void;
 };
 
-export function RecipeBook({ book, mascotUrl, onUpdate, onRemove, onToast }: Props) {
+export function RecipeBook({ book, mascotUrl, onUpdate, onRemove, onToast, onBack }: Props) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [editId, setEditId] = useState<string | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
