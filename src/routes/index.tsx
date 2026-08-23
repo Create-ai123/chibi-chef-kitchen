@@ -391,7 +391,18 @@ function Index() {
           </div>
         </header>
 
-        {/* Ingredient selector */}
+        {showBook ? (
+          <RecipeBook
+            book={book}
+            mascotUrl={chefMascot.url}
+            onUpdate={update}
+            onRemove={remove}
+            onToast={setToast}
+            onBack={() => setShowBook(false)}
+          />
+        ) : (
+          <>
+            {/* Ingredient selector */}
         <section
           ref={pantryRef}
 
