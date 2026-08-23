@@ -220,7 +220,7 @@ function Index() {
       // Hide the floating mascot once the Steps section approaches, so it never
       // overlaps ingredients, Chef's Thought, steps, checklist or the timer.
       const nearSteps = stepsTop !== undefined && stepsTop < vh * 0.9;
-      setFloatVisible(headerBottom < 0 && !nearSteps);
+      setFloatVisible(headerBottom < 0 && !nearSteps && !showBook);
 
       if (recipe) {
         setFloatMsg("Tadaa! Here's your recipe. Check off steps as you go! 💛");
@@ -242,7 +242,14 @@ function Index() {
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [started, recipe]);
+  }, [started, recipe, showBook]);
+
+  // Toast auto-hide
+  useEffect(() => {
+    if (!toast) return;
+    const id = setTimeout(() => setToast(null), 2200);
+    return () => clearTimeout(id);
+  }, [toast]);
 
 
   // Typewriter intro
