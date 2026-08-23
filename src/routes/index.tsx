@@ -741,6 +741,16 @@ function Index() {
         />
       </div>
 
+      {/* Toast */}
+      <div
+        aria-live="polite"
+        className={`fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform rounded-full bg-primary px-5 py-2.5 font-fredoka text-sm font-bold text-primary-foreground shadow-[var(--shadow-cozy)] transition-all duration-300 ${
+          toast ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
+        }`}
+      >
+        {toast}
+      </div>
+
     </main>
   );
 }
