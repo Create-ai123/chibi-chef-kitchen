@@ -192,6 +192,11 @@ function Index() {
   const [seconds, setSeconds] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Recipe book
+  const { book, save, update, remove, isSaved } = useRecipeBook();
+  const [showBook, setShowBook] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
   // Floating scroll mascot
   const headerRef = useRef<HTMLElement | null>(null);
   const pantryRef = useRef<HTMLElement | null>(null);
