@@ -7,6 +7,7 @@ type Props = {
   onUpdate: (id: string, patch: Partial<Pick<SavedRecipe, "title" | "notes" | "favorite">>) => void;
   onRemove: (id: string) => void;
   onToast: (msg: string) => void;
+  onBack?: () => void;
 };
 
 export function RecipeBook({ book, mascotUrl, onUpdate, onRemove, onToast }: Props) {
