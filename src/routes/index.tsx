@@ -551,7 +551,37 @@ function Index() {
               </div>
             )}
 
-            <h2 className="font-fredoka text-2xl font-extrabold">{recipe.title}</h2>
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="font-fredoka text-2xl font-extrabold">{recipe.title}</h2>
+              {(() => {
+                const alreadySaved = isSaved(recipe.title, recipe.steps);
+                return (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const saved = save({
+                        title: recipe.title,
+                        description: recipe.tip,
+                        ingredients: recipe.ingredients,
+                        steps: recipe.steps,
+                        time: recipe.time,
+                        method: recipe.method,
+                        difficulty: "Beginner",
+                      });
+                      if (saved) setToast("Recipe saved! 🥰");
+                    }}
+                    disabled={alreadySaved}
+                    className={`shrink-0 rounded-full px-3 py-2 font-fredoka text-xs font-bold transition-transform duration-200 hover:scale-105 active:scale-95 ${
+                      alreadySaved
+                        ? "bg-muted text-muted-foreground"
+                        : "bg-accent text-accent-foreground shadow-[var(--shadow-soft)]"
+                    }`}
+                  >
+                    {alreadySaved ? "Saved ♥" : "♡ Save Recipe"}
+                  </button>
+                );
+              })()}
+            </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="rounded-full bg-accent px-3 py-1 font-fredoka text-xs font-bold text-accent-foreground">
                 ⏱️ {recipe.time} min
