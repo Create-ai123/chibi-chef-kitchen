@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import chefMascot from "@/assets/chibi-chef.png.asset.json";
 import chefFull from "@/assets/chef-full.png.asset.json";
+import { RecipeBook } from "@/components/RecipeBook";
+import { useRecipeBook } from "@/lib/recipe-book";
 
 export const Route = createFileRoute("/")({
   head: () => ({
