@@ -709,6 +709,9 @@ function Index() {
           </section>
         )}
 
+          </>
+        )}
+
         <footer className="pb-6 text-center text-xs text-muted-foreground">
           Made with love · Your chef says: eat something warm today 💛
         </footer>
