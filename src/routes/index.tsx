@@ -313,7 +313,7 @@ function Index() {
         <section className="animate-scale-in w-full max-w-md rounded-[2.5rem] border-2 border-dashed border-secondary bg-card p-8 text-center shadow-[var(--shadow-cozy)]">
           <div className="mx-auto flex h-52 w-52 items-center justify-center sm:h-64 sm:w-64">
             <img
-              src={chefMascot.url}
+              src={chefMascot}
               alt="Cozy chef mascot smiling"
               width={768}
               height={768}
@@ -351,7 +351,7 @@ function Index() {
         <header ref={headerRef} className="animate-fade-in rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-cozy)] sm:p-7">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             <img
-              src={chefFull.url}
+              src={chefFull}
               alt="Cozy chef mascot holding a wooden spoon"
               width={768}
               height={768}
