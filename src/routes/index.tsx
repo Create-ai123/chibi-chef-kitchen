@@ -731,8 +731,8 @@ function Index() {
           </p>
         </div>
         <img
-          src={chefMascot.url}
-          alt=""
+          src={chefMascot}
+          alt="chef"
           width={768}
           height={768}
           loading="eager"
