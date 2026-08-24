@@ -667,7 +667,7 @@ function Index() {
             <div className="mt-6 flex items-start gap-3">
               <div className="flex h-14 w-14 shrink-0 items-end justify-center sm:h-20 sm:w-20">
                 <img
-                  src={chefMascot.url}
+                  src={chefMascot}
                   alt=""
                   loading="eager"
                   width={768}
