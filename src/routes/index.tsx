@@ -394,7 +394,7 @@ function Index() {
         {showBook ? (
           <RecipeBook
             book={book}
-            mascotUrl={chefMascot.url}
+            mascotUrl={chefMascot}
             onUpdate={update}
             onRemove={remove}
             onToast={setToast}
